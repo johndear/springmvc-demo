@@ -1,0 +1,65 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+	<h1>springmvc相关</h1>
+	<h4>springmvc运行流程：</h4>
+	<center><img src="resources/images/springmvc运行流程.png"/></center>
+	<h4>1、静态资源处理：</h4>
+	<div style="margin-left: 20px;border:2px solid #ccc;padding-top:10px;">
+	1、
+	&lt;!-- 静态资源处理方法1（先交由web应用服务器处理，进行后缀匹配），如：css,js,images等文件 --&gt;<br>
+	&lt;!-- 如果发现是静态资源的请求，就将该请求转由Web应用服务器默认的Servlet处理（不同web服务器交由不同servlet处理，此处通过servlet-name指定），如果不是静态资源的请求，才由DispatcherServlet处理 --&gt;<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color: #ccc;">
+	&lt;mvc:default-servlet-handler default-servlet-name="default" /&gt;<br>
+</span><br>
+2、
+	&lt;!-- 静态资源处理方法2（再交由sprinmvc处理，进行路径前缀匹配），如：css,js,images等文件 --&gt;<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color: #ccc;">
+	&lt;mvc:resources location="/resources/" mapping="/resources/**"/&gt;<br><br>
+	</span>
+	</div>
+	
+	<h4>1、异常处理：</h4>
+	<div style="margin-left: 20px;border:2px solid #ccc;">
+	<center><img src="resources/images/springmvc-exception.png"/></center>
+	有2种实现:<br>
+	1、基于HandlerExceptionResolver接口的异常处理。参考：SimpleMappingExceptionResolver，也可以自定义实现HandlerExceptionResolver接口方法resolveException（） --- 全局异常
+	<br> 2、基于@ExceptionHandler的异常处理。 --- 局部异常（参考<a href="#">CookieController</a>）、全局异常（使用@controllerAdvice-参考<a href="#">ExceptionController</a>）
+	<br>
+	<br> 相关问题：
+	<br>
+	<h4>1、HandlerExceptionResolver 和 web.xml中配置的error-page会有冲突吗？</h4>
+	<div style="margin-left: 20px;">
+		web.xml中配置error-page同样是配置出现错误时显示的页面：<br> <span
+			style="background-color: #ccc;"> &lt;error-page&gt;<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&lt;error-code&gt;500&lt;/error-code&gt;<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&lt;location&gt;/500.jsp&lt;/location&gt;<br>
+			&lt;/error-page&gt;<br>
+		</span>
+		如果resolveException返回了ModelAndView，会优先根据返回值中的页面来显示。不过，resolveException可以返回null，此时则展示web.xml中的error-page的500状态码配置的页面。<br>
+		当web.xml中有相应的error-page配置，则可以在实现resolveException方法时返回null。 <br>
+		API文档中对返回值的解释：<br> <span style="background-color: #ccc;">return
+			a corresponding ModelAndView to forward to, or null for default
+			processing.<br>
+		<br>
+		<br>
+		</span>
+	</div>
+	</div>
+
+<h4>2、使用InitBinder来处理Date类型的参数</h4>
+<div style="margin-left: 20px;border:2px solid #ccc;">参考UserController</div>
+<h4>3、文件上传</h4>
+<div style="margin-left: 20px;border:2px solid #ccc;">参考FileController</div>
+<h4>4、设置一个自定义拦截器</h4>
+<h4>5、表单的验证（使用Hibernate-validate）及国际化</h4>
+<div style="margin-left: 20px;border:2px solid #ccc;">参考UserController</div>
+
+<br><br><br><br>
+更多扩展文章：<br>
+<a href="http://www.runoob.com/jsp/jsp-jstl.html">jsp jstl教程</a>
+<br><br><br><br><br><br>
+</body>
+</html>
